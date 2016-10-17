@@ -21,24 +21,21 @@ namespace Test_3___ASP.NET_and_LINQ_to_SQL.DAL
         private NorthwindDataContext _nothwindContext = null;
 
         public CustomerRepository()
-        {
-            if (_nothwindContext == null)
-            {
-                _nothwindContext = new NorthwindDataContext();
-            }            
+        {                
         }
 
         // Return distincy country names
-        protected IEnumerable<string> GetCountries()
+        public IList<string> GetCountries()
         {
-            IEnumerable<string> countries = null;
+            IList<string> countries = null;
             try
             {
-                using (_nothwindContext)
-                {
-                    countries = (from c in _nothwindContext.Customers select c.Country).Distinct();
-                    return countries;
-                }
+                _nothwindContext = new NorthwindDataContext();
+                
+                countries = (from c in _nothwindContext.Customers select c.Country).Distinct().ToList();
+                countries.Insert(0, "--- select a country ---");
+                return countries;
+                
             }
             catch (Exception)
             {
@@ -47,14 +44,13 @@ namespace Test_3___ASP.NET_and_LINQ_to_SQL.DAL
         }
 
         // Get all the customers
-        protected IEnumerable<CustomerViewModel> GetCustomers()
+        public IEnumerable<CustomerViewModel> GetCustomers()
         {
             IEnumerable<CustomerViewModel> customers = null;
             try
             {
-                using (_nothwindContext)
-                {
-                    customers = from c in _nothwindContext.Customers select new CustomerViewModel {
+                _nothwindContext = new NorthwindDataContext();
+                customers = from c in _nothwindContext.Customers select new CustomerViewModel {
                         CustomerID = c.CustomerID,
                         CompanyName = c.CompanyName,
                         ContactTitle = c.ContactTitle,
@@ -63,7 +59,7 @@ namespace Test_3___ASP.NET_and_LINQ_to_SQL.DAL
                         Country = c.Country
                     };
                     return customers;
-                }
+                
             }
             catch (Exception)
             {
@@ -72,14 +68,13 @@ namespace Test_3___ASP.NET_and_LINQ_to_SQL.DAL
         }
 
         // Get customers by country
-        protected IEnumerable<CustomerViewModel> GetCustomerByCountry(string country)
+        public IEnumerable<CustomerViewModel> GetCustomerByCountry(string country)
         {
             IEnumerable<CustomerViewModel> customersByCountry = null;
             try
             {
-                using (_nothwindContext)
-                {
-                    customersByCountry = from c in _nothwindContext.Customers where c.Country.Equals(country) select new CustomerViewModel {
+                _nothwindContext = new NorthwindDataContext();
+                customersByCountry = from c in _nothwindContext.Customers where c.Country.Equals(country) select new CustomerViewModel {
                         CustomerID = c.CustomerID,
                         CompanyName = c.CompanyName,
                         ContactTitle = c.ContactTitle,
@@ -88,7 +83,7 @@ namespace Test_3___ASP.NET_and_LINQ_to_SQL.DAL
                         Country = c.Country
                     };
                     return customersByCountry;                
-                }
+                
             }
             catch (Exception)
             {
@@ -97,13 +92,15 @@ namespace Test_3___ASP.NET_and_LINQ_to_SQL.DAL
         }
 
         // Return customer by customer ID
-        protected Customer GetCustomerByID(string customerID)
+        public Customer GetCustomerByID(string customerID)
         {
             Customer customer = null;
             try
             {
+                _nothwindContext = new NorthwindDataContext();
                 customer = (from c in _nothwindContext.Customers where c.CustomerID.Equals(customerID) select c).SingleOrDefault<Customer>();
-                return customer;
+                    return customer;
+                
             }
             catch (Exception)
             {

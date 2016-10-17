@@ -31,15 +31,6 @@ namespace Test_3___ASP.NET_and_LINQ_to_SQL {
         protected global::System.Web.UI.WebControls.DropDownList CountriesDDL;
         
         /// <summary>
-        /// LinqDataSourceCountries control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinqDataSource LinqDataSourceCountries;
-        
-        /// <summary>
         /// CustomerByCountryGrid control.
         /// </summary>
         /// <remarks>
@@ -49,15 +40,6 @@ namespace Test_3___ASP.NET_and_LINQ_to_SQL {
         protected global::System.Web.UI.WebControls.GridView CustomerByCountryGrid;
         
         /// <summary>
-        /// LinqDataSourceCustomersByCountry control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinqDataSource LinqDataSourceCustomersByCountry;
-        
-        /// <summary>
         /// CustomerDetailView control.
         /// </summary>
         /// <remarks>
@@ -65,14 +47,5 @@ namespace Test_3___ASP.NET_and_LINQ_to_SQL {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DetailsView CustomerDetailView;
-        
-        /// <summary>
-        /// LinqDataSourceCustomerDetails control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinqDataSource LinqDataSourceCustomerDetails;
     }
 }
