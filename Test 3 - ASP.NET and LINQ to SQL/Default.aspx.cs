@@ -46,22 +46,129 @@ namespace Test_3___ASP.NET_and_LINQ_to_SQL
         // Attach details view events
         private void AttachDetailsViewEvents()
         {
-            CustomerDetailView.ModeChanging += CustomerDetailView_ModeChanging;
+            // on Edit, New or Delete buttons clicked
+            CustomerDetailView.ItemCommand += CustomerDetailView_ItemCommand;
+
+            // fired at the time of the insert, edit modes changes
+            CustomerDetailView.ModeChanging += CustomerDetailView_ModeChanging; 
+            
+            // fired when deleting items    
+            CustomerDetailView.ItemDeleting += CustomerDetailView_ItemDeleting;
+
+            // fired when inserting
+            CustomerDetailView.ItemInserted += CustomerDetailView_ItemInserted;
+
+            // fired when updating
+            CustomerDetailView.ItemUpdating += CustomerDetailView_ItemUpdating;
+            CustomerDetailView.ItemUpdated += CustomerDetailView_ItemUpdated;
+            //CustomerDetailView.
+
         }
 
-        // On add, modify or delete
-        private void CustomerDetailView_ModeChanging(object sender, DetailsViewModeEventArgs e)
+        // fired when a new customer is added
+        private void CustomerDetailView_ItemInserted(object sender, DetailsViewInsertedEventArgs e)
         {
-            //if (e.NewMode = "")
-            //{ }
+            try
+            {
+                // refersh the grid
+                BindDataToGridView();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        private void CustomerDetailView_ItemUpdated(object sender, DetailsViewUpdatedEventArgs e)
+        {
+            try
+            {
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         // Attach grid view events   
         private void AttachGridViewEvents()
-        {                    
+        {
+            // fired when pagination happens
             CustomerByCountryGrid.PageIndexChanging += CustomerByCountryGrid_PageIndexChanging;
+
+            // fired when a record/row is selected in the grid
             CustomerByCountryGrid.SelectedIndexChanged += CustomerByCountryGrid_SelectedIndexChanged;
         }
+
+        // fired when updating an existing customer from the details view 
+        private void CustomerDetailView_ItemUpdating(object sender, DetailsViewUpdateEventArgs e)
+        {
+            try
+            {
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        
+
+        private void CustomerDetailView_ItemCommand(object sender, DetailsViewCommandEventArgs e)
+        {
+            if (e.CommandName == "New")
+            {
+                // add mode
+                CustomerDetailView.ChangeMode(DetailsViewMode.Insert);
+                CustomerDetailView.HeaderText = "Add new customer";
+            }
+            else if (e.CommandName == "Edit")
+            {
+                // set to edit mode
+                CustomerDetailView.ChangeMode(DetailsViewMode.Edit);
+
+                // get selected customer Id         
+                string customerID = CustomerDetailView.HeaderText.Replace("Read only mode - Customer ID : ", "");
+                // rebind data     
+                Customer customer = _customerRepository.GetCustomerByID(customerID);
+                CustomerDetailView.HeaderText = "Edit mode - Customer ID : " + customer.CustomerID;
+                CustomerDetailView.DataSource = new List<Customer> { customer };
+                CustomerDetailView.DataBind();
+            }
+            else if (e.CommandName == "Cancel")
+            {
+                // unbind any data on cancel button press                
+                CustomerDetailView.DataSource = null;
+                CustomerDetailView.DataBind();
+            }
+            else if (e.CommandName == "Insert")
+            {
+                // insert data
+            }
+        }
+
+        // On delete customer
+        private void CustomerDetailView_ItemDeleting(object sender, DetailsViewDeleteEventArgs e)
+        {
+            try
+            {              
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        // On details view mode change
+        private void CustomerDetailView_ModeChanging(object sender, DetailsViewModeEventArgs e)
+        {
+            CustomerDetailView.AllowPaging = false;            
+        }
+
+        
 
 
 
@@ -72,6 +179,8 @@ namespace Test_3___ASP.NET_and_LINQ_to_SQL
             {
                 string selectedCustomerID = CustomerByCountryGrid.SelectedDataKey.Value.ToString();
                 Customer customer = _customerRepository.GetCustomerByID(selectedCustomerID);
+                CustomerDetailView.ChangeMode(DetailsViewMode.ReadOnly);
+                CustomerDetailView.HeaderText = "Read only mode - Customer ID : " + customer.CustomerID;                                    // Edit and delete purposes            
                 CustomerDetailView.DataSource = new List<Customer> { customer };
                 CustomerDetailView.DataBind();
             }
@@ -94,21 +203,9 @@ namespace Test_3___ASP.NET_and_LINQ_to_SQL
                 throw;
             }
         }
+               
 
-        // manage sorting
-        //private void CustomerByCountryGrid_Sorting(object sender, GridViewSortEventArgs e)
-        //{
-        //    try
-        //    {
-        //        DataTable boundData = DirectCast(CustomerByCountryGrid.DataSource, DataTable);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-        //}
-
-        // manage paging
+        // fired when user paginates
         private void CustomerByCountryGrid_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             try

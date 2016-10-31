@@ -24,7 +24,7 @@ namespace Test_3___ASP.NET_and_LINQ_to_SQL.DAL
         {                
         }
 
-        // Return distincy country names
+        // Return distinct country names
         public IList<string> GetCountries()
         {
             IList<string> countries = null;
@@ -105,6 +105,45 @@ namespace Test_3___ASP.NET_and_LINQ_to_SQL.DAL
             catch (Exception)
             {
                 throw;
+            }
+        }
+
+        // Insert new customer
+        public void CreateCustomer(Customer customer)
+        {
+            try
+            {
+                _nothwindContext.Customers.InsertOnSubmit(customer);
+                _nothwindContext.SubmitChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        // Update
+        public void UpdateCustomer(Customer customer)
+        {
+            try
+            {
+                Customer customerToUpdate = (from c in _nothwindContext.Customers where c.CustomerID == customer.CustomerID select c).SingleOrDefault();
+                customerToUpdate.ContactName = customer.ContactName;
+                customerToUpdate.ContactTitle = customer.ContactTitle;
+                customerToUpdate.CompanyName = customer.CompanyName;                
+                customerToUpdate.Address = customer.Address;
+                customerToUpdate.City = customer.City;
+                customerToUpdate.Region = customer.Region;
+                customerToUpdate.PostalCode = customer.PostalCode;
+                customerToUpdate.Country = customer.Country;                
+                customerToUpdate.Phone = customer.Phone;
+                customerToUpdate.Fax = customer.Fax;
+
+                _nothwindContext.SubmitChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }    
